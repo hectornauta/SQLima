@@ -10,7 +10,7 @@ logger = logging.getLogger()
 
 def crear_csv(fecha_de_hoy):
 
-    archivo = open("registro_temperatura365d_smn.txt", "r")
+    archivo = open("registro_temperatura365d_smn_1.txt", "r")
 
     lineas = archivo.readlines()
     archivo.close()
