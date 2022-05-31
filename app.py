@@ -1,4 +1,3 @@
-import logging
 import csv_generator as generador
 
 import datetime
@@ -12,13 +11,10 @@ import plotly.express as px
 from dash.dependencies import Input, Output
 
 # Inicialización del logger
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(module)s - %(message)s',
-                    datefmt='%Y-%m-%d'
-                    )
-logger = logging.getLogger(__name__)
 
-logger.setLevel(logging.DEBUG)
+import logging_config
+
+logger = logging_config.configure_logging('app')
 
 # Obtención de la fecha actual
 # fecha = datetime.datetime.now()
@@ -30,8 +26,8 @@ logger.setLevel(logging.DEBUG)
 # Crear el csv limpiando el archjivo txt
 # generador.crear_csv(fecha_de_hoy)
 
-dataframe_provincias = pd.read_csv('PROVINCIAS.csv', delimiter=';')
-dataframe_registros = pd.read_csv('REGISTROS.csv', delimiter=';')
+dataframe_provincias = pd.read_csv('data/PROVINCIAS.csv', delimiter=';')
+dataframe_registros = pd.read_csv('data/REGISTROS_2021.csv', delimiter=';')
 
 provincias = dataframe_provincias['provincia']
 provincias.drop_duplicates(inplace=True)
@@ -58,7 +54,7 @@ logger.info(dataframe_registros)
 # Primer tipo de informe, promedio de temperaturas por ubicación
 # Usar lista de keys para evitar warnings about deprecate cosas
 dataframe_mes = dataframe_registros.groupby(['provincia', 'mes'])[['temperatura_maxima', 'temperatura_minima']].mean()
-logging.info(dataframe_mes)
+logger.info(dataframe_mes)
 dataframe_mes.reset_index(inplace=True)
 
 # dataframe_mes_copia = dataframe_mes.copy()
@@ -133,4 +129,4 @@ def update_linegraph(value):
     return fig
 
 if __name__ == ('__main__'):
-    app.run_server(debug=True)
+    app.run_server(debug=False)
